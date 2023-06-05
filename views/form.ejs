@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Form</title>
+        <style>
+            *{
+                margin: 0;
+                color: rgb(169, 234, 198);
+                font-size: 18px;
+                font-family: cursive;
+            }
+            body{
+                height: 100vh;
+                background-image: url('https://images.pexels.com/photos/3069306/pexels-photo-3069306.jpeg?auto=compress&cs=tinysrgb&w=1600');
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            table{
+                width: 600px;
+                margin: 0 auto;
+                border-collapse: collapse;
+                background-color: rgba(21, 46, 34, 0.681);
+                backdrop-filter: blur(5px);
+            }
+            table input{
+                background-color: transparent;
+                outline: none;
+                border: 2px solid;
+                padding: 5px 10px;
+            }
+            table th{
+                font-size: 20px;
+                padding: 5px 10px;
+            }
+            table td{
+                text-align: center;
+                padding: 5px 10px;
+            }
+            select{
+                border: 2px solid;
+                padding: 5px 25px;
+                background-color: transparent;
+            }
+            select option{
+                background-color:  rgba(21, 46, 34, 0.584);
+            }
+            .table{
+                width: 80%;
+            }
+            .table th, .table td{
+                border: 4px double rgba(146, 192, 169, 0.584);
+            }
+        </style>
+    </head>
+    <body>
+        <form method="post" action="/insertData" enctype="multipart/form-data">
+            <input type="hidden" name="editid" value="<%= single.id %>"/>
+            <table>
+                <tr>
+                    <td>Movie Name</td>
+                    <td><input type="text" value="<%= single.movieName %>" name="movieName"></td>
+                </tr>
+                <tr>
+                    <td>Director</td>
+                    <td><input type="text"  value="<%= single.director %>" name="director"></td>
+                </tr>
+                <tr>
+                    <td>Writer</td>
+                    <td><input type="text"  value="<%= single.writer %>" name="writer"></td>
+                </tr>
+                <tr>
+                    <td>Actors</td>
+                    <td><input type="text" value="<%= single.actor %>" name="actor"></td>
+                </tr>
+                <tr>
+                    <td>Language</td>
+                    <td>
+                        <input type="checkbox" <% if(single.language) { if(single.language.includes('hindi')) { %> checked <% } } %>  value="hindi" name="language">Hindi &nbsp;&nbsp;
+                        <input type="checkbox" <% if(single.language) { if(single.language.includes('english')) { %> checked <% } } %>  value="english" name="language">English &nbsp;&nbsp;
+                        <input type="checkbox" <% if(single.language) { if(single.language.includes('gujarati')) { %> checked <% } } %>  value="gujarati" name="language">Gujarati
+                    </td>
+                </tr>
+                <tr>
+                    <td>Country</td>
+                    <td><input type="text" value="<%= single.country %>" name="country"></td>
+                </tr>
+                <tr>
+                    <td>Movie Type</td>
+                    <td>
+                        <select name="movieType">
+                            <option value="">---select type---</option>
+
+                            <%
+                                let movieType = ["Action","Drama","Thriller","Comedy","Horror","Romantic"]; 
+                                for(let i in movieType) {
+                            %>
+                                <option <% if(single.movieType == movieType[i]) { %> selected <% } %> value="<%= movieType[i] %>"><%= movieType[i] %></option>
+                            <% } %>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>File Upload</td>
+                    <td>
+                        <input type="file" name="poster">
+                        <% if(single) { %>
+                                <img src="<%= single.poster %>"/>
+                        <% } %>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td> 
+                        <% if(!single) { %>
+                            <input type="submit">
+                        <% } else { %>
+                            <input type="submit" value="Edit">
+                        <% } %>
+                    </td>
+                </tr>
+            </table>
+        </form><br><br>
+
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Movie</th>
+                <th>Director</th>
+                <th>Writer</th>
+                <th>Actor</th>
+                <th>Language</th>
+                <th>Country</th>
+                <th>Type</th>
+                <th>Image</th>
+                <th>Action</th>
+            </tr>
+
+            <% user.map((val,i)=>{ 
+                    const {id,movieName,director,writer,actor,language,country,movieType,poster} = val;
+                    i++;
+                %>
+                <tr>
+                    <td><%= i %></td>
+                    <td><%= movieName %></td>
+                    <td><%= director %></td>
+                    <td><%= writer %></td>
+                    <td><%= actor %></td>
+                    <td><%= language %></td>
+                    <td><%= country %></td>
+                    <td><%= movieType %></td>
+                    <td>
+                        <img src="<%= poster  %>" width="150"/>
+                    </td>
+                    <td>
+                        <a href="/deleteData?id=<%= id %>">Delete</a> ||
+                        <a href="/editData?id=<%= id %>">Edit</a>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </body>
+</html>
+
+
